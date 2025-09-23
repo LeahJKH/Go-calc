@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	// importing of smaller modules
 	"go-calc/mathop"
 	"go-calc/numberone"
@@ -10,8 +11,12 @@ import (
 
 func main() {
 	//the big brains O_O
-	num1 := numberone.GetNumberOne()
-	op := operator.GetOperator()
-	num2 := numbertwo.GetNumberTwo()
-	mathop.Calculate(num1, op, num2)
+	fmt.Print("Welcome to Go-Calc! Press Ctrl+C to exit.\n")
+	for {
+		num1 := numberone.GetNumberOne()
+		op := operator.GetOperator()
+		num2 := numbertwo.GetNumberTwo()
+		mathop.Calculate(num1, op, num2)
+		fmt.Print("\n")
+	}
 }
