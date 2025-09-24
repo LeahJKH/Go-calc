@@ -1,13 +1,14 @@
 package numbertwo
 
 import (
-	"fmt"
+	"strconv"
 )
 
-func GetNumberTwo() int {
-	// makes second number
-	var num2 int
-	fmt.Print("Insert number 2: ")
-	fmt.Scan(&num2)
-	return num2
+
+func ParseEntry(input string) int {
+	num, err := strconv.Atoi(input)
+	if err != nil {
+		return 0
+	}
+	return num
 }

@@ -1,11 +1,14 @@
 package numberone
 
-import "fmt"
+import (
+	"strconv"
+)
 
-func GetNumberOne() int {
-	// makes the first number
-	var num1 int
-	fmt.Print("Insert number 1: ")
-	fmt.Scan(&num1)
-	return num1
+
+func ParseEntry(input string) int {
+	num, err := strconv.Atoi(input)
+	if err != nil {
+		return 0
+	}
+	return num
 }
