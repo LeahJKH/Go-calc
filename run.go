@@ -1,54 +1,57 @@
 package main
 
 import (
-	"go-calc/mathop"
-	"go-calc/numberone"
-	"go-calc/numbertwo"
-	"go-calc/operator"
-
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/widget"
+
+	"go-calc/themeium"
 )
+
+
 
 func main() {
 	a := app.New()
-	w := a.NewWindow("Go-Calc GUI")
+	a.Settings().SetTheme(&themeium.MyTheme{})
 
+	w := a.NewWindow("Calculator")
 
-	w.SetIcon(resourceIconPng)
+	input := binding.NewString()
+	entry := widget.NewEntryWithData(input)
 
-	w.Resize(fyne.NewSize(400, 300))
+	makeBtn := func(label string) *widget.Button {
+		return widget.NewButton(label, func() {
+			switch label {
+			case "C":
+				input.Set("")
+			case "Ce":
+				val, _  := input.Get()
+				if len(val) > 0 {
+					input.Set(val[:len(val)-1])
+				}
+			case "=":
+				//mathium.stringSplitter(input.Get())
+				
+			default:
+				val, _ := input.Get()
+				input.Set(val + label)
+			}
+		})
+	}
+	buttons := container.NewGridWithColumns(5,
+		makeBtn("Ce"), makeBtn("C"), makeBtn("("), makeBtn(")"),makeBtn("abs("),
+		makeBtn("7"), makeBtn("8"), makeBtn("9"), makeBtn("/"), makeBtn("acos("),
+		makeBtn("4"), makeBtn("5"), makeBtn("6"), makeBtn("*"), makeBtn("acosh("),
+		makeBtn("1"), makeBtn("2"), makeBtn("3"), makeBtn("-"), makeBtn("asin("),
+		makeBtn("0"), makeBtn("."), makeBtn("="), makeBtn("+"),makeBtn("asinh("),
+		makeBtn("atan("), makeBtn("atanh("), makeBtn("ceil("), makeBtn("tanh("),
+		makeBtn("cos("), makeBtn("cosh("), makeBtn("exp("), makeBtn("floor("),
+		makeBtn("log("), makeBtn("log10("), makeBtn("round("), makeBtn("sign("),
+		makeBtn("sin("), makeBtn("sinh("), makeBtn("sqrt("), makeBtn("tan("),		
+	)
 
-
-	num1Entry := widget.NewEntry()
-	num1Entry.SetPlaceHolder("Number 1")
-
-	num2Entry := widget.NewEntry()
-	num2Entry.SetPlaceHolder("Number 2")
-
-	opEntry := widget.NewEntry()
-	opEntry.SetPlaceHolder("Operator (+, -, *, /)")
-
-	resultLabel := widget.NewLabel("Result will appear here")
-
-	calcBtn := widget.NewButton("Calculate", func() {
-		num1 := numberone.ParseEntry(num1Entry.Text)
-		num2 := numbertwo.ParseEntry(num2Entry.Text)
-		op := operator.ValidateOperator(opEntry.Text)
-
-		mathop.CalculateGUI(num1, op, num2, resultLabel)
-	})
-
-
-	w.SetContent(container.NewVBox(
-		num1Entry,
-		opEntry,
-		num2Entry,
-		calcBtn,
-		resultLabel,
-	))
-
+	content := container.NewVBox(entry, buttons)
+	w.SetContent(content)
 	w.ShowAndRun()
 }
